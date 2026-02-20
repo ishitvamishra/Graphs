@@ -27,10 +27,11 @@ class Solution {
             int u = edge[0];
             int v = edge[1];
 
-            boolean[] vis = new boolean[n + 1];
+           
 
             // Check: is there already a path between u and v agar hai toh 
             if (!adj.get(u).isEmpty() && !adj.get(v).isEmpty()) {
+                boolean[] vis = new boolean[n + 1];
                 if (dfs(u, v, vis, adj)) {
                     return edge;   // this edge creates cycle
                 }
