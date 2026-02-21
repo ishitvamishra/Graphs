@@ -1,81 +1,70 @@
 class Solution {
+    String b;
+    HashMap<String, Integer> mpp;
+    List<List<String>> ans;
 
-    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+    public void dfs(String word, List<String> seq){
+        if(word.equals(b)){
+            List<String> dup = new ArrayList<>(seq);
+            Collections.reverse(dup);
+            ans.add(dup);
+            return;
+        }
 
-        Set<String> dict = new HashSet<>(wordList);
-        List<List<String>> result = new ArrayList<>();
-
-        if (!dict.contains(endWord)) return result;
-
-        // Map for parents
-        Map<String, List<String>> parents = new HashMap<>();
-
-        // Level tracking
-        Set<String> currentLevel = new HashSet<>();
-        currentLevel.add(beginWord);
-
-        boolean found = false;
-
-        while (!currentLevel.isEmpty() && !found) {
-
-            dict.removeAll(currentLevel);
-            Set<String> nextLevel = new HashSet<>();
-
-            for (String word : currentLevel) {
-
-                char[] arr = word.toCharArray();
-
-                for (int i = 0; i < arr.length; i++) {
-                    char original = arr[i];
-
-                    for (char c = 'a'; c <= 'z'; c++) {
-                        arr[i] = c;
-                        String newWord = new String(arr);
-
-                        if (!dict.contains(newWord)) continue;
-
-                        nextLevel.add(newWord);
-
-                        parents
-                            .computeIfAbsent(newWord, k -> new ArrayList<>())
-                            .add(word);
-
-                        if (newWord.equals(endWord))
-                            found = true;
+        int steps = mpp.get(word);
+        int sz = word.length();
+        for(int i = 0; i < sz; i++){
+                for(char ch = 'a'; ch <= 'z'; ch++){
+                    char replacedArray[] = word.toCharArray();
+                    replacedArray[i] = ch;
+                    String replacedWord = new String(replacedArray);
+                    if(mpp.containsKey(replacedWord) && mpp.get(replacedWord)+1 == steps){
+                        seq.add(replacedWord);
+                        dfs(replacedWord, seq);
+                        seq.remove(seq.size()-1);
                     }
-
-                    arr[i] = original;
                 }
             }
+    } 
 
-            currentLevel = nextLevel;
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        Set<String> st = new HashSet<>();
+        for(int i = 0; i < wordList.size(); i++){
+            st.add(wordList.get(i));
         }
 
-        if (!found) return result;
-
-        List<String> path = new ArrayList<>();
-        backtrack(endWord, beginWord, parents, path, result);
-
-        return result;
-    }
-
-    private void backtrack(String word, String beginWord,
-                           Map<String, List<String>> parents,
-                           List<String> path,
-                           List<List<String>> result) {
-
-        path.add(word);
-
-        if (word.equals(beginWord)) {
-            List<String> temp = new ArrayList<>(path);
-            Collections.reverse(temp);
-            result.add(temp);
-        } else {
-            for (String parent : parents.getOrDefault(word, new ArrayList<>())) {
-                backtrack(parent, beginWord, parents, path, result);
+        Queue<String> q = new LinkedList<>();
+        b = beginWord;
+        q.add(beginWord);
+        mpp = new HashMap<>();
+        mpp.put(beginWord, 1);
+        int sizee = beginWord.length();
+        st.remove(beginWord);
+        while(!q.isEmpty()){
+            String word = q.peek();
+            int steps = mpp.get(word);
+            q.remove();
+            if(word.equals(endWord)) break;
+            for(int i = 0; i < sizee; i++){
+                for(char ch = 'a'; ch <= 'z'; ch++){
+                    char replacedArray[] = word.toCharArray();
+                    replacedArray[i] = ch;
+                    String replacedWord = new String(replacedArray);
+                    if(st.contains(replacedWord)){
+                        q.add(replacedWord);
+                        st.remove(replacedWord);
+                        mpp.put(replacedWord, steps+1);
+                    }
+                }
             }
         }
 
-        path.remove(path.size() - 1);
+        ans = new ArrayList<>();
+        if(mpp.containsKey(endWord)){
+            List<String> seq = new ArrayList<>();
+            seq.add(endWord);
+            dfs(endWord, seq);
+        }
+        return ans;
     }
 }
