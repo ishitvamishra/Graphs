@@ -19,11 +19,11 @@ class Solution {
             for(int i = 0; i < size; i++){
                 int x = q.poll();
 
-                if(x == 0) return steps;
-
                 for(int p : perfect){
                     if(p <= x){
                         int num = x -  p;
+
+                        if(num == 0) return steps + 1;
 
                         if(!vis[num]){
                             q.add(num);
