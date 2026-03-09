@@ -24,19 +24,19 @@ class Solution {
 
             for(int i = 0; i < size; i++){
                 int idx = q.poll();
-                
-                if(idx == n-1) return steps;
 
                 //Left(i - 1)
                 if(idx - 1 >= 0 && !vis[idx - 1]){
                     vis[idx - 1] = true;
                     q.add(idx - 1);
+                    if(idx - 1 == n-1) return steps + 1;
                 }
 
                 //Right(i + 1);
                 if(idx + 1 < n && !vis[idx + 1]){
                     vis[idx + 1] = true;
                     q.add(idx + 1);
+                    if(idx + 1 == n-1) return steps + 1;
                 }
 
                 //Same value
@@ -45,6 +45,7 @@ class Solution {
                         if(!vis[next]){
                             vis[next] = true;
                             q.add(next);
+                            if(next == n-1) return steps + 1;
                         }
                     }
 
