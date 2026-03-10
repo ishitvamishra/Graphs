@@ -37,11 +37,11 @@ class Solution {
                 int obs = q.peek().obs;
                 q.remove();
 
-                if(row == n-1 && col == m-1) return steps;
-
                 for(int d = 0; d < 4; d++){
                     int nr = row + dx[d];
                     int nc = col + dy[d];
+
+                    if(nr == n-1 && nc == m-1) return steps + 1;
 
                     if(nr < 0 || nc < 0 || nr >= n || nc >= m) continue;
 
