@@ -27,6 +27,8 @@ class Solution {
             while(!q.isEmpty()){
                 int node = q.poll();
 
+                if(dist[node] * 2 + 1 >= ans) continue;
+
                 for(int nei : adj.get(node)){
                     if(dist[nei] == -1){
                         dist[nei] = dist[node] + 1;
