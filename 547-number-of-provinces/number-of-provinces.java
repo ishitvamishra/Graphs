@@ -1,38 +1,62 @@
-class Solution {
-    public void dfs(int node, ArrayList<ArrayList<Integer>> adjList, boolean[] vis){
-        vis[node] = true;
-
-        for(int it : adjList.get(node)){
-            if(!vis[it]){
-                dfs(it, adjList, vis);
-            }
+class DisjointSet{
+    int[] parent;;
+    int[] size;
+        
+    DisjointSet(int n){
+        parent = new int[n];
+        size = new int[n];
+            
+        for(int i = 0; i < n; i++){
+            parent[i] = i;
+            size[i] = 1;
         }
     }
+        
+    int findUPar(int node){
+        if(node == parent[node]){
+            return node;
+        }
+            
+        return parent[node] = findUPar(parent[node]);
+    }
+        
+    void unionBySize(int u, int v){
+        int pu = findUPar(u);
+        int pv = findUPar(v);
+            
+        if(pu == pv) return;
+            
+        if(size[pu] < size[pv]){
+            parent[pu] = pv;
+            size[pv] = size[pv] + size[pu];
+        } 
+            
+        else{
+            parent[pv] = pu;
+            size[pu] = size[pu] + size[pv];
+        }
+    }
+
+}
+class Solution {
     public int findCircleNum(int[][] isConnected) {
         int V = isConnected.length;
-        ArrayList<ArrayList<Integer>> adjList = new ArrayList<>();
+        
+        DisjointSet ds = new DisjointSet(V);
 
         for(int i = 0; i < V; i++){
-            adjList.add(new ArrayList<>());
-        }
-
-        for(int i = 0; i < V; i++){
+            
             for(int j = 0; j < V; j++){
-                if(isConnected[i][j] == 1 && i != j){
-                    adjList.get(i).add(j);
-                    adjList.get(j).add(i);
+                if(isConnected[i][j] == 1){
+                    ds.unionBySize(i, j);
                 }
             }
         }
 
-        boolean vis[] =  new boolean[V];
-        int count = 0;
+        int cnt = 0;
         for(int i = 0; i < V; i++){
-            if(!vis[i]){
-                count++;
-                dfs(i, adjList, vis);
-            }
+            if(ds.parent[i] == i) cnt++;
         }
-        return count;
+        return cnt;
     }
 }
