@@ -38,6 +38,8 @@ class DisjointSet{
     }
 
 }
+//Using DSU construct the sets and find all the nodes that are ultimate parent 
+//or representative of each sets, count them and return them
 class Solution {
     public int findCircleNum(int[][] isConnected) {
         int V = isConnected.length;
