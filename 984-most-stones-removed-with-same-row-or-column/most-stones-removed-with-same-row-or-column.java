@@ -42,7 +42,7 @@ class Solution {
             maxRow = Math.max(maxRow, stone[0]);
             maxCol = Math.max(maxCol, stone[1]);
         }
-        
+
         DisjointSet ds = new DisjointSet(maxRow + maxCol + 2);
 
         HashSet<Integer> set = new HashSet<>();
