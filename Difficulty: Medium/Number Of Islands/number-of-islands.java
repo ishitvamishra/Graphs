@@ -1,66 +1,84 @@
-// User function Template for Java
+class DisjointSet {
+    int[] parent;
+    int[] size;
+
+    DisjointSet(int n) {
+        parent = new int[n];
+        size = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            parent[i] = i;
+            size[i] = 1;
+        }
+    }
+
+    int findUPar(int node) {
+        if (node == parent[node]) return node;
+        return parent[node] = findUPar(parent[node]);
+    }
+
+    void unionBySize(int u, int v) {
+        int pu = findUPar(u);
+        int pv = findUPar(v);
+
+        if (pu == pv) return;
+
+        if (size[pu] < size[pv]) {
+            parent[pu] = pv;
+            size[pv] += size[pu];
+        } else {
+            parent[pv] = pu;
+            size[pu] += size[pv];
+        }
+    }
+}
 
 class Solution {
-
-    int[] dr = {-1, 0, 1, 0};
-    int[] dc = {0, 1, 0, -1};
-
+    int dx[] = {-1, 0, 1, 0};
+    int dy[] = {0, 1, 0, -1};
+    
+    public boolean isValid(int adjr, int adjc, int n, int m){
+        return adjr >= 0 && adjr < n && adjc >= 0 && adjc < m;
+    }
+    
     public List<Integer> numOfIslands(int n, int m, int[][] operators) {
-
-        int[][] grid = new int[n][m];
-        List<Integer> result = new ArrayList<>();
-
-        for (int op = 0; op < operators.length; op++) {
-
-            int row = operators[op][0];
-            int col = operators[op][1];
-
-            // If already land, just repeat last count
-            if (grid[row][col] == 1) {
-                if (op == 0) result.add(0);
-                else result.add(result.get(op - 1));
+        DisjointSet ds = new DisjointSet(n * m);
+        int[][] vis = new int[n][m];
+        int cnt = 0;
+        
+        List<Integer> ans = new ArrayList<>();
+        int len = operators.length;
+        for(int i = 0; i < len; i++){
+            int row = operators[i][0];
+            int col = operators[i][1];
+            
+            if(vis[row][col] == 1){
+                ans.add(cnt);
                 continue;
             }
-
-            grid[row][col] = 1;
-
-            boolean[][] visited = new boolean[n][m];
-            int count = 0;
-
-            // Count islands using DFS
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-
-                    if (grid[i][j] == 1 && !visited[i][j]) {
-                        dfs(grid, visited, i, j, n, m);
-                        count++;
+            
+            vis[row][col] = 1;
+            cnt++;
+            
+            //finding neighbour
+            for(int ind = 0; ind < 4; ind++){
+                int adjr = row + dx[ind];
+                int adjc = col + dy[ind];
+                
+                if(isValid(adjr, adjc, n, m)){
+                    if(vis[adjr][adjc] == 1){
+                        int nodeNo = row * m + col;
+                        int adjNodeNo = adjr * m + adjc;
+                        
+                        if(ds.findUPar(nodeNo) != ds.findUPar(adjNodeNo)){
+                            cnt--;
+                            ds.unionBySize(nodeNo, adjNodeNo);
+                        }
                     }
                 }
             }
-
-            result.add(count);
+            ans.add(cnt);
         }
-
-        return result;
-    }
-
-    private void dfs(int[][] grid, boolean[][] visited,
-                     int row, int col, int n, int m) {
-
-        visited[row][col] = true;
-
-        for (int k = 0; k < 4; k++) {
-
-            int nr = row + dr[k];
-            int nc = col + dc[k];
-
-            if (nr >= 0 && nr < n &&
-                nc >= 0 && nc < m &&
-                grid[nr][nc] == 1 &&
-                !visited[nr][nc]) {
-
-                dfs(grid, visited, nr, nc, n, m);
-            }
-        }
+        return ans;
     }
 }
