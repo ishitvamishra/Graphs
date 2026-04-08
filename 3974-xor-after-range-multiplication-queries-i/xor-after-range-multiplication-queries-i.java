@@ -1,14 +1,22 @@
 class Solution {
-    public int xorAfterQueries(int[] n, int[][] q) {
-        int mod = 1_000_000_007;
-        for(int[] a:q){
-            for(int i = a[0];i<=a[1];i += a[2]){
-                long p = (long)(n[i])*a[3];
-                n[i] =(int) (p%mod);
+
+    private static final int MOD = 1_000_000_007;
+
+    public int xorAfterQueries(int[] nums, int[][] queries) {
+        int n = nums.length;
+        for (int[] q : queries) {
+            int l = q[0];
+            int r = q[1];
+            int k = q[2];
+            int v = q[3];
+            for (int i = l; i <= r; i += k) {
+                nums[i] = (int) (((long) nums[i] * v) % MOD);
             }
         }
-        int s = 0;
-        for(int i : n) s ^= i;
-        return s;
+        int res = 0;
+        for (int x : nums) {
+            res ^= x;
+        }
+        return res;
     }
 }
