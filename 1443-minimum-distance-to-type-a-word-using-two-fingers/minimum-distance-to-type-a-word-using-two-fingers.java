@@ -1,46 +1,40 @@
 class Solution {
+    int[][] pos = new int[26][2];
+    Integer[][][] dp;
+
     public int minimumDistance(String word) {
-        int n = word.length();
-        
-        // Precompute coordinates
-        int[][] pos = new int[26][2];
+        // Precompute positions
         for(int i = 0; i < 26; i++){
             pos[i][0] = i / 6;
             pos[i][1] = i % 6;
         }
 
-        // Distance function
-        java.util.function.BiFunction<Integer, Integer, Integer> dist = (a, b) -> {
-            return Math.abs(pos[a][0] - pos[b][0]) + Math.abs(pos[a][1] - pos[b][1]);
-        };
+        int n = word.length();
+        dp = new Integer[n][27][27];
 
-        int total = 0;
-        int[] dp = new int[26]; // max saving
+        return solve(word, 0, 26, 26); // 26 = no finger placed yet
+    }
 
-        for(int i = 1; i < n; i++){
-            int prev = word.charAt(i - 1) - 'A';
-            int curr = word.charAt(i) - 'A';
+    private int solve(String word, int i, int f1, int f2){
+        if(i == word.length()) return 0;
 
-            int d = dist.apply(prev, curr);
-            total += d;
+        if(dp[i][f1][f2] != null) return dp[i][f1][f2];
 
-            int[] newDp = new int[26];
+        int curr = word.charAt(i) - 'A';
 
-            for(int c = 0; c < 26; c++){
-                // option 1: don't use second finger
-                newDp[c] = Math.max(newDp[c], dp[c]);
+        // move finger1
+        int cost1 = (f1 == 26) ? 0 : dist(f1, curr);
+        cost1 += solve(word, i + 1, curr, f2);
 
-                // option 2: use second finger (move from c → curr)
-                int gain = d - dist.apply(c, curr);
-                newDp[prev] = Math.max(newDp[prev], dp[c] + gain);
-            }
+        // move finger2
+        int cost2 = (f2 == 26) ? 0 : dist(f2, curr);
+        cost2 += solve(word, i + 1, f1, curr);
 
-            dp = newDp;
-        }
+        return dp[i][f1][f2] = Math.min(cost1, cost2);
+    }
 
-        int maxSaved = 0;
-        for(int val : dp) maxSaved = Math.max(maxSaved, val);
-
-        return total - maxSaved;
+    private int dist(int a, int b){
+        return Math.abs(pos[a][0] - pos[b][0]) +
+               Math.abs(pos[a][1] - pos[b][1]);
     }
 }
