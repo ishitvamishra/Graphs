@@ -1,55 +1,56 @@
-class State{
-    int dist;
-    int color;
+class State {
     int row;
     int col;
-    
+    int color;
 
-    State(int dist, int color, int row, int col){
+    State(int row, int col, int color) {
         this.row = row;
         this.col = col;
-        this.dist = dist;
         this.color = color;
     }
 }
 
 class Solution {
-    int[] dx = {-1, 0, 1, 0};
-    int[] dy = {0, 1, 0, -1};
-    
+    int[] dx = { -1, 0, 1, 0 };
+    int[] dy = { 0, 1, 0, -1 };
+
     public int[][] colorGrid(int n, int m, int[][] sources) {
         int[][] grid = new int[n][m];
-        boolean[][] visited = new boolean[n][m];
+        int[][] time = new int[n][m];
+        Queue<State> q = new LinkedList<>();
 
-        // PQ: distance ↑ , color ↓
-        PriorityQueue<State> pq = new PriorityQueue<>((a, b) -> {
-            if (a.dist != b.dist) return a.dist - b.dist;
-            return b.color - a.color;
-        });
+        for (int[] source : sources) {
+            int row = source[0];
+            int col = source[1];
+            int color = source[2];
 
-        // initialize sources
-        for (int[] src : sources) {
-            int r = src[0], c = src[1], col = src[2];
-            pq.offer(new State(0, col, r, c));
+            grid[row][col] = color;
+            time[row][col] = time[row][col] + 1;
+            q.add(new State(row, col, color));
         }
 
-        while (!pq.isEmpty()) {
-            State curr = pq.poll();
-
+        while (!q.isEmpty()) {
+            State curr = q.poll();
             int r = curr.row;
             int c = curr.col;
-
-            if (visited[r][c]) continue;
-
-            visited[r][c] = true;
-            grid[r][c] = curr.color;
+            int col = curr.color;
 
             for (int i = 0; i < 4; i++) {
                 int nr = r + dx[i];
                 int nc = c + dy[i];
 
-                if (nr >= 0 && nr < n && nc >= 0 && nc < m && !visited[nr][nc]) {
-                    pq.offer(new State(curr.dist + 1, curr.color, nr, nc));
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m) {
+                    if (time[nr][nc] == 0) {
+                        grid[nr][nc] = col;
+                        time[nr][nc] = time[r][c] + 1;
+                        q.add(new State(nr, nc, col));
+                    }
+                    else if (time[nr][nc] == time[r][c] + 1) {
+                        if (grid[nr][nc] < col) {
+                            grid[nr][nc] = col;
+                            q.add(new State(nr, nc, col));
+                        }
+                    }
                 }
             }
         }
