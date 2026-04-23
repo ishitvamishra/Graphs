@@ -17,7 +17,7 @@ class Solution {
                 coins.add(i);
 
                 for(int j = i; j <= n; j++){
-                    dp[j] += dp[j  - i];
+                    dp[j] += dp[j - i];
                 }
 
                 if (dp[i] != numWays[i - 1]) {
