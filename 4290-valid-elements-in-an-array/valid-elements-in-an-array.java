@@ -1,31 +1,36 @@
 class Solution {
     public List<Integer> findValidElements(int[] nums) {
         int n = nums.length;
-        List<Integer> list = new ArrayList<>();
-        list.add(nums[0]);
-        if(n == 1) return list;
-
-        for(int mid = 1; mid < n - 1; mid++){
-            int left = 0;
-            int right = n - 1;
-            boolean flag1 = true, flag2 = true;
-
-            while(left < mid){
-                if(nums[left] >= nums[mid]) flag1 = false;
-                left++;
-            }
-
-            while(mid < right){
-                if(nums[right] >= nums[mid]) flag2 = false;
-                right--;
-            }
-
-            if(flag1 || flag2) list.add(nums[mid]);
+        List<Integer> res = new ArrayList<>();
+        
+        if (n == 1) {
+            res.add(nums[0]);
+            return res;
         }
 
-        list.add(nums[n-1]);
+        int[] leftMax = new int[n];
+        int[] rightMax = new int[n];
 
-        return list;
+        // Build leftMax
+        leftMax[0] = Integer.MIN_VALUE;
+        for (int i = 1; i < n; i++) {
+            leftMax[i] = Math.max(leftMax[i - 1], nums[i - 1]);
+        }
+
+        // Build rightMax
+        rightMax[n - 1] = Integer.MIN_VALUE;
+        for (int i = n - 2; i >= 0; i--) {
+            rightMax[i] = Math.max(rightMax[i + 1], nums[i + 1]);
+        }
+
+        // Check valid elements
+        for (int i = 0; i < n; i++) {
+            if (i == 0 || i == n - 1 || nums[i] > leftMax[i] || nums[i] > rightMax[i]) {
+                res.add(nums[i]);
+            }
+        }
+
+        return res;
 
     }
 }
