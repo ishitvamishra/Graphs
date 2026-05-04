@@ -27,15 +27,15 @@ class Solution {
         }
 
         // Reconstruct LDS
-        ArrayList<Integer> lis = new ArrayList<>();
+        ArrayList<Integer> lds = new ArrayList<>();
         while (parent[lastIndex] != lastIndex) {
-            lis.add(nums[lastIndex]);
+            lds.add(nums[lastIndex]);
             lastIndex = parent[lastIndex];
         }
-        lis.add(nums[lastIndex]);
+        lds.add(nums[lastIndex]);
 
         // reverse because we built it backwards
-        Collections.reverse(lis);
-        return lis;
+        Collections.reverse(lds);
+        return lds;
     }
 }
