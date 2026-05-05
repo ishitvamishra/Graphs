@@ -20,6 +20,7 @@ class Solution {
         int max = 0;
         for(int i = 0; i < n; i++){
             if(up[i] > 0 && down[i] > 0){
+                // -1 nhi kr rhe bcz lbs ki tarah peak element include nhi kr rhe yaha
                 max = Math.max(max, up[i] + down[i] + 1);  
             }
         }
