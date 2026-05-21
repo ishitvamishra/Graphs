@@ -16,10 +16,6 @@ class Solution {
             
         }
 
-        for(int i = 0; i < prefix.length; i++){
-            System.out.println(prefix[i]);
-        }
-
         int[] ans = new int[queries.length];
         int j = 0;
         for(int[] query : queries){
