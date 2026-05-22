@@ -11,7 +11,7 @@ class Solution {
 
         for(int i = 0; i < n; i++) {
 
-            long keep = 1L * beans[i] * (n - i);
+            long keep = (long)beans[i] * (n - i);
             long remove = total - keep;
 
             ans = Math.min(ans, remove);
