@@ -9,13 +9,13 @@ class Solution {
             sumEven += (i*2);
         }
 
-        System.out.println(sumEven);
+        return gcd(sumOdd, sumEven);
+    }
 
-        int ans =  0;
-        for(int i = 1; i <= Math.min(sumOdd, sumEven); i++){
-            if(sumOdd % i == 0 && sumEven % i == 0) ans = i;
+    public int gcd(int a, int b){
+        if(a==0){
+            return b;
         }
-
-        return ans;
+        return gcd(b%a, a);
     }
 }
