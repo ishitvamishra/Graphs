@@ -4,6 +4,7 @@ class Solution {
         for(int n : nums){
             //number pf bananas / your capacity
             total += n / capacity;
+            //leftover bananas over your capacity
             if(n % capacity > 0) total++;
         }
 
