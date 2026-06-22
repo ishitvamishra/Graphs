@@ -9,6 +9,7 @@ class Solution {
             int mid = low + (high - low)/2;
 
             if(nums[mid] == target){
+                //for first occurence we need to keep looking at left side for first occ, hence high = mid - 1
                 ans = mid;
                 high = mid - 1;
             } else if(nums[mid] < target){
@@ -30,6 +31,7 @@ class Solution {
             int mid = low + (high - low)/2;
 
             if(nums[mid] == target){
+                //for last occurence we need to keep looking at right side for last occ, hence low = mid + 1
                 ans = mid;
                 low = mid + 1;
             } else if(nums[mid] < target){
