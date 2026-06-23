@@ -37,26 +37,25 @@ class Solution {
         int n = accounts.size();
         DisjointSet ds = new DisjointSet(n);
 
-        //Store emails with respactive nodes in map
+        //email -> nodes hashmap
         HashMap<String, Integer> map = new HashMap<>();
 
-        //union accounts based on common emails
         for(int i = 0; i < n; i++){
             List<String> acc = accounts.get(i);
 
             for(int j = 1; j < acc.size(); j++){
                 String email = acc.get(j);
 
+                //agr pehle se map me nhi h toh add krdo i ke saath
                 if(!map.containsKey(email)){
                     map.put(email, i);
-                }
-                else{
+                } else{
+                    //agr h pehle se h toh normal union krke parent same krdo
                     ds.unionBySize(i, map.get(email));
                 }
             }
-        }  
+        }
 
-        //Group emails by parent
         Map<Integer, List<String>> merged =  new HashMap<>();
 
         //for each email in map, agar vo email ke parent ka koi ultimate parent h toh
@@ -83,5 +82,6 @@ class Solution {
         }
 
         return res;
+
     }
 }
