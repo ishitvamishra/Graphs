@@ -48,7 +48,7 @@ class Solution {
 
         for(int i = 0; i < V; i++){
             
-            for(int j = 0; j < V; j++){
+            for(int j = i+1; j < V; j++){
                 if(isConnected[i][j] == 1){
                     ds.unionBySize(i, j);
                 }
