@@ -24,7 +24,7 @@ class Solution {
                 return new int[] {maxRow, mid};
             }
 
-            if(nums[maxRow][mid] > left){
+            if(right > nums[maxRow][mid]){
                 low = mid + 1;
             } else{
                 high = mid - 1;
