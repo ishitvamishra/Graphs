@@ -8,7 +8,7 @@ class Solution {
             //check if target is equal to nums[mid]
             if(nums[mid] == target) return mid;
 
-            //check if left half is sorted or not
+            //check if left half is sorted or not -> either left half will be sorted or right 
             if(nums[low] <= nums[mid]){
                 //look for target in left half if yes eliminate right half otherwise eliminate left half
                 if(target >= nums[low] && target < nums[mid]){
@@ -17,6 +17,7 @@ class Solution {
                     low = mid + 1;
                 }
             } else{
+                //check if target is present in the right half or not, if yes eliminate left else right
                 if(target > nums[mid] && target <= nums[high]){
                     low = mid + 1;
                 } else{
