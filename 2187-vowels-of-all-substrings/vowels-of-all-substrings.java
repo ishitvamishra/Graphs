@@ -1,5 +1,4 @@
 class Solution {
-
     public long countVowels(String word) {
 
         long ans = 0;
