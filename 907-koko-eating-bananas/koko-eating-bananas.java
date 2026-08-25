@@ -1,30 +1,29 @@
 class Solution {
-    private long canEat(int[] nums, int capacity){
+    public long canEat(int k, int[] piles){
         long total = 0;
-        for(int n : nums){
-            //number pf bananas / your capacity
-            total += n / capacity;
-            //leftover bananas over your capacity
-            if(n % capacity > 0) total++;
+        for(int p : piles){
+            total += p / k;
+
+            if(p % k > 0) total++;
         }
 
         return total;
     }
-    public int minEatingSpeed(int[] nums, int k) {
+
+    public int minEatingSpeed(int[] piles, int h) {
         int low = 1, high = 0;
-        for(int wt : nums){
-            high = Math.max(high, wt);
+        for(int p : piles){
+            high = Math.max(high, p);
         }
 
         int ans = high;
-        
         while(low <= high){
             int mid = low + (high - low) / 2;
 
-            if(canEat(nums, mid) <= (long)k){
+            if(canEat(mid, piles) <= (long)h){
                 ans = mid;
                 high = mid - 1;
-            }else{
+            } else{
                 low = mid + 1;
             }
         }
