@@ -1,24 +1,28 @@
 class Solution {
-    int drow[] = {-1, 0, 1, 0};
-    int dcol[] = {0, 1, 0, -1};
-    private void dfs(int row, int col, int[][] copy, int[][] image, int oldColor, int color){
-        copy[row][col] = color;
-        int n = image.length;
-        int m = image[0].length;
+    int[] row = {-1, 0, 1, 0};
+    int[] col = {0, 1, 0, -1};
 
-        for(int i = 0; i<4; i++){
-            int nr = row + drow[i];
-            int nc = col + dcol[i];
-            if(nr >= 0 && nc >= 0 && nr < n && nc < m && image[nr][nc] == oldColor && copy[nr][nc] != color){
-                dfs(nr, nc, copy, image, oldColor, color);
+    public void dfs(int[][] image, int r, int c, int n, int m, int start, int color){
+        image[r][c] = color;
+
+        for(int i = 0; i < 4; i++){
+            int nr = row[i] + r;
+            int nc = col[i] + c;
+
+            if(nr >= 0 && nr < n && nc >= 0 && nc < m && image[nr][nc] == start && image[nr][nc] != color){
+                dfs(image, nr, nc, n, m, start, color);
             }
         }
     }
 
     public int[][] floodFill(int[][] image, int sr, int sc, int color) {
-        int oldColor = image[sr][sc];
-        int[][] copy = image;
-        dfs(sr, sc, copy, image, oldColor, color);
-        return copy;
+        int n = image.length;
+        int m = image[0].length;
+
+        int start = image[sr][sc];
+
+        dfs(image, sr, sc, n, m, start, color);
+
+        return image;
     }
 }
