@@ -19,13 +19,24 @@ class Solution {
         int[][] vis = new int[n][m];
 
         for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(i == 0 || i == n - 1 || j == 0 || j == m - 1){
-                    if(grid[i][j] == 1){
-                        vis[i][j] = 1;
-                        dfs(i, j, n, m, vis, grid);
-                    }
-                }
+
+            if(grid[i][0] == 1 && vis[i][0] == 0){
+                dfs(i, 0, n, m, vis, grid);
+            }
+
+            if(grid[i][m-1] == 1 && vis[i][m-1] == 0){
+                dfs(i, m-1, n, m, vis, grid);
+            }
+        }
+
+        for(int j = 0; j < m; j++){
+
+            if(grid[0][j] == 1 && vis[0][j] == 0){
+                dfs(0, j, n, m, vis, grid);
+            }
+
+            if(grid[n-1][j] == 1 && vis[n-1][j] == 0){
+                dfs(n-1, j, n, m, vis, grid);
             }
         }
 
