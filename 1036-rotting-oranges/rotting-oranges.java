@@ -14,6 +14,7 @@ class Solution {
                 if(grid[i][j] == 2){
                     q.add(new int[]{i, j});
                 }
+
                 else if(grid[i][j] == 1){
                     fresh++;
                 }
